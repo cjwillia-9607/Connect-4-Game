@@ -1,3 +1,5 @@
+STATES = ['UNFINISHED', 'X_WON', 'O_WON', 'DRAW']
+
 class ConnectFour:
     def __init__(self, width=7, height=6, connect=4, pieces=('X', 'O')):
         self.width = width
@@ -5,25 +7,26 @@ class ConnectFour:
         self.connect = connect
         self.pieces = pieces
         self.board = [' ' for _ in range(self.width * self.height)]
-    
-    def __str__(self):
-        result = ''
-        for row in range(self.height):
-            for col in range(self.width):
-                result += self.board[row * self.width + col] + '|'
-            result += '\n'
-        return result
+        self.state = 'UNFINISHED'
     
     def insert(self, col, piece):
         if self.board[col] != ' ':
             raise ValueError('Column is full')
         
-        for row in range(self.height - 1, 0, -1):
-            if self.board[(row - 1) * self.width + col] != ' ':
+        for row in range(self.height-1, -1, -1):
+            if self.board[row * self.width + col] == ' ':
                 self.board[row * self.width + col] = piece
+                self.update_state(piece)
+                break
     
     def is_full(self):
         return ' ' not in self.board
+    
+    def update_state(self, piece):
+        if self.is_winner(piece):
+            self.state = '{p}_WON'.format(p=piece)
+        elif self.is_full():
+            self.state = 'DRAW'
     
     def is_winner(self, piece):
         # Horizontal
@@ -54,6 +57,7 @@ class ConnectFour:
     
     # make a string representation of the board
     def __str__(self):
+        # print(self.board)
         result = ''
         for row in range(self.height):
             for col in range(self.width):
@@ -64,4 +68,19 @@ class ConnectFour:
 if __name__ == '__main__':
     c4 = ConnectFour()
     c4.insert(0, 'X')
+    c4.insert(1, 'O')
+    c4.insert(1, 'X')
+    c4.insert(2, 'O')
+    c4.insert(2, 'X')
+    c4.insert(2, 'X')
+    c4.insert(3, 'X')
+    c4.insert(3, 'O')
+    c4.insert(3, 'X')
+    c4.insert(3, 'X')
+    # c4.insert(4, 'X')
+    # c4.insert(4, 'O')
+    # c4.insert(4, 'X')
+    # c4.insert(4, 'O')
+    # c4.insert(5, 'X')
     print(c4)
+    print(c4.state)
