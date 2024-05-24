@@ -51,3 +51,17 @@ class ConnectFour:
                     return True
         
         return False
+    
+    # make a string representation of the board
+    def __str__(self):
+        result = ''
+        for row in range(self.height):
+            for col in range(self.width):
+                result += self.board[row * self.width + col] + '|'
+            result += '\n'
+        return result
+
+if __name__ == '__main__':
+    c4 = ConnectFour()
+    c4.insert(0, 'X')
+    print(c4)
