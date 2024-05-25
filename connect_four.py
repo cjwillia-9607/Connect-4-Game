@@ -63,6 +63,9 @@ class ConnectFour:
         
         return False
     
+    def copy_gamestate(self):
+        return ConnectFour(width=self.width, height=self.height, connect=self.connect, pieces=self.pieces, board=self.board[:])
+    
     # make a string representation of the board
     def __str__(self):
         # print(self.board)
@@ -72,6 +75,7 @@ class ConnectFour:
                 result += self.board[row * self.width + col] + '|'
             result += '\n'
         return result
+    
 
 if __name__ == '__main__':
     c4 = ConnectFour()
