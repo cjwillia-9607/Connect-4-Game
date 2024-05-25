@@ -1,15 +1,22 @@
 STATES = ['UNFINISHED', 'X_WON', 'O_WON', 'DRAW']
 
 class ConnectFour:
-    def __init__(self, width=7, height=6, connect=4, pieces=('X', 'O')):
+    # if given board, assumes unfinished game
+    def __init__(self, width=7, height=6, connect=4, pieces=('X', 'O'), board=None):
         self.width = width
         self.height = height
         self.connect = connect
         self.pieces = pieces
-        self.board = [' ' for _ in range(self.width * self.height)]
+        if board:
+            self.board = board
+        else:
+            self.board = [' ' for _ in range(self.width * self.height)]
         self.state = 'UNFINISHED'
+        self.current_piece = pieces[0]
     
     def insert(self, col, piece):
+        if col < 0 or col >= self.width:
+            raise ValueError('Invalid column')
         if self.board[col] != ' ':
             raise ValueError('Column is full')
         
@@ -27,6 +34,7 @@ class ConnectFour:
             self.state = '{p}_WON'.format(p=piece)
         elif self.is_full():
             self.state = 'DRAW'
+        self.current_piece = self.pieces[(self.pieces.index(piece) + 1) % len(self.pieces)]
     
     def is_winner(self, piece):
         # Horizontal

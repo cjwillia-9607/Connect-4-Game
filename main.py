@@ -14,7 +14,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         
-        self.current_piece = 0
 
     def run(self):
         while self.running:
@@ -47,8 +46,8 @@ class Game:
                 
                 if row is not None:
                     try:
-                        self.game.insert(row, self.pieces[self.current_piece])
-                        self.current_piece = (self.current_piece + 1) % len(self.pieces)
+                        self.game.insert(row, self.pieces[self.game.current_piece])
+                        self.game.current_piece = (self.game.current_piece + 1) % len(self.pieces)
                     except ValueError:
                         print('Column is full')
                 
