@@ -70,11 +70,29 @@ def non_ai_play(bot):
             print('Column is full')
     print(c4)
 
+def no_player(bot_1, bot_2):
+    c4 = ConnectFour()
+    while c4.state == 'UNFINISHED':
+        print(c4)
+        if c4.current_piece == 'X':
+            col = bot_1.choose_column(c4)
+        else:
+            col = bot_2.choose_column(c4)
+        try:
+            c4.insert(col, c4.current_piece)
+        except ValueError:
+            print('Column is full')
+
+        input("Press Enter to continue")
+    print(c4.state)
+    print(c4)
+        
+
 
 if __name__ == '__main__':
     c4 = ConnectFour()
     game_type = input('Enter game type (ai/minmax/human): ')
-    if game_type == "ai" :
+    if game_type == "ai" or game_type == "bots":
         model_path = input('Enter model path: ')
         bot = NeuralNetworkBot('X', tf.keras.models.load_model(model_path))
     
@@ -82,8 +100,10 @@ if __name__ == '__main__':
     if game_type == 'ai':
         manual_play(bot)
     elif game_type == 'minmax':
-        non_ai_play(MinMaxBot('X'))
+        non_ai_play(MinMaxBot('X', 4))
     elif game_type == 'human':
         human_play()
+    elif game_type == 'bots':
+        no_player(bot, MinMaxBot('O', 2))
     else:
         print('Invalid game type')

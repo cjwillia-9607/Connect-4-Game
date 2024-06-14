@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 import random
 from connect_four import ConnectFour
@@ -13,15 +13,23 @@ class NeuralNetworkBot:
 
     def build_model(self):
         model = Sequential([
-            Dense(64, input_dim=7 * 6, activation='relu'),
+            Input(shape=(7 * 6,)),  # Specify input shape here
+            Dense(128, activation='relu'),  # Increased number of neurons
+            Dense(256, activation='relu'),  # Added an additional layer
+            Dense(256, activation='relu'),  # Added an additional layer
+            Dense(128, activation='relu'),  # Added an additional layer
             Dense(64, activation='relu'),
+            Dense(64, activation='relu'),
+            Dense(32, activation='relu'),
             Dense(7, activation='linear')
         ])
         model.compile(optimizer=Adam(), loss='mse')
         return model
     
     def convert_board(self, board):
-        piece_to_number = {' ': 0, 'X': 1, 'O': -1}
+        x_val = 1 if self.piece == 'X' else -1
+        o_val = 1 if self.piece == 'O' else -1
+        piece_to_number = {' ': 0, 'X': x_val, 'O': o_val}
         return np.array([piece_to_number[cell] for cell in board]).reshape(1, -1)
 
     def choose_column(self, game):

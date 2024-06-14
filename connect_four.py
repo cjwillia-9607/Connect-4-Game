@@ -1,6 +1,7 @@
 STATES = ['UNFINISHED', 'X_WON', 'O_WON', 'DRAW']
 
 class ConnectFour:
+    #  "x" is the first player, "o" is the second player
     # if given board, assumes unfinished game
     def __init__(self, width=7, height=6, connect=4, pieces=('X', 'O'), board=None):
         self.width = width
@@ -14,12 +15,13 @@ class ConnectFour:
         self.state = 'UNFINISHED'
         self.current_piece = pieces[0]
     
-    def insert(self, col, piece):
+    def insert(self, col, piece=None):
         if col < 0 or col >= self.width:
             raise ValueError('Invalid column')
         if self.board[col] != ' ':
             raise ValueError('Column is full')
-        
+        if not piece:
+            piece = self.current_piece
         for row in range(self.height-1, -1, -1):
             if self.board[row * self.width + col] == ' ':
                 self.board[row * self.width + col] = piece
